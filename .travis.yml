@@ -19,3 +19,15 @@ after_success:
     - docker push identity404/multi-nginx
     - docker push identity404/multi-server
     - docker push identity404/multi-worker
+
+deploy:
+    provider: elasticbeanstalk
+    region: us-east-1
+    app: multi-docker
+    env: MultiDocker-env
+    bucket_name: elasticbeanstalk-us-east-1-334054608221
+    bucket_path: multi-docker
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
