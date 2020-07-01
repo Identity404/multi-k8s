@@ -12,12 +12,10 @@ before_install:
   - az aks get-credentials --resource-group multi-k8s --name multi-k8s-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t identity404/react-test -f ./client/Dockerdile.dev ./client
-
-  script: 
+script: 
     - docker run CI=true identity404/react-test npm test
-
-  deploy:
-    provider: script
-    script: bash ./deploy.sh
-    on:
-      branch: master
+deploy:
+  provider: script
+  script: bash ./deploy.sh
+  on:
+    branch: master
