@@ -11,7 +11,7 @@ before_install:
   - sudo az aks install-cli
   - az aks get-credentials --resource-group multi-k8s --name multi-k8s-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t identity404/react-test -f ./client/Dockerdile.dev ./client
+  - docker build -t identity404/react-test -f ./client/Dockerfile.dev ./client
 script: 
     - docker run CI=true identity404/react-test npm test
 deploy:
