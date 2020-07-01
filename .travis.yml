@@ -1,8 +1,23 @@
 sudo: required
 services:
   - docker
+env:
+  global:
+    - GIT_SHA=$(git rev-parse HEAD)
 before_install:
   - openssl aes-256-cbc -K $encrypted_f7187a59b136_key -iv $encrypted_f7187a59b136_iv -in multi-k8s-clusterSP-20200630142738.pem.enc -out multi-k8s-clusterSP-20200630142738.pem -d
   - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-  - az aks install-cli
   - az login --service-principal -u http://multi-k8s-clusterSP-20200630142738 -p multi-k8s-clusterSP-20200630142738.pem --tenant 67a8e67d-04e4-423c-bb98-cdf754992eb1
+  - az aks install-cli
+  - az aks get-credentials --resource-group multi-k8s --name multi-k8s-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t identity404/react-test -f ./client/Dockerdile.dev ./client
+
+  script: 
+    - docker run CI=true identity404/react-test npm test
+
+  deploy:
+    provider: script
+    script: bash ./deploy.sh
+    on:
+      branch: master
