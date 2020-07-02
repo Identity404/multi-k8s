@@ -1,0 +1,20 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadaata:
+  name: pizzahat-biz-tls
+spec:
+  secreteName: pizzahat-biz
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: pizzahat.biz
+  dnsName:
+    - pizzahat.biz
+    - www.pizzahat.biz
+  acme:
+    config:
+      - http01:
+        ingressClass: nginx
+        domains:
+          - pizzahat.biz
+          - www.pizzahat.biz
